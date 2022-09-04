@@ -53,7 +53,7 @@ function ExecutorMsg({
 
   function sendFact(e: SyntheticEvent, fact: number | null, workID: number) {
     e.preventDefault();
-    async function login() {
+    async function sendFact() {
       setError(null);
       const res = await fetch(
         `https://dev.api.rm.pragma.info/projects/${queryParams.id}/works/msg/executor/update-fact`,
@@ -64,11 +64,9 @@ function ExecutorMsg({
             Authorization: `Bearer ${queryParams.token}`,
           },
           body: JSON.stringify({
-            date: {
-              date: format(new Date() as any, "dd.MM.yyyy"),
-              fact,
-              workID,
-            },
+            date: format(new Date() as any, "dd.MM.yyyy"),
+            fact,
+            workID,
           }),
         },
       );
@@ -77,8 +75,12 @@ function ExecutorMsg({
         setError(json.error);
       }
     }
-    login();
+    sendFact();
   }
+
+  useEffect(() => {
+    console.log(error);
+  }, [error]);
 
   // const navigate = useNavigate();
 
