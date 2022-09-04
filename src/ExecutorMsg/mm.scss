@@ -1,0 +1,246 @@
+@import "../breakpoints.scss";
+.mm {
+  @include desktop {
+    padding: 1rem;
+  }
+  &__container {
+  }
+  &__topbar {
+    display: none;
+    padding: 1rem 0;
+    @include desktop {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+  &__levelone {
+    background-color: #fff;
+    margin: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem;
+    border-radius: 5px;
+    @include desktop {
+      display: none;
+    }
+    &--left {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      h4 {
+        font-size: 14px;
+        color: #00358c;
+      }
+      p {
+        color: #5c6e8c;
+        font-size: 10px;
+      }
+      h5 {
+        font-size: 12px;
+        background-color: #00358c;
+        color: #fff;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: grid;
+        place-content: center;
+      }
+    }
+    &--right {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #ed6c02;
+      span {
+        font-size: 1rem;
+        margin-top: 0.1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.1rem;
+        svg:last-child {
+          margin-bottom: 0.1rem;
+          @include phone {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+  // &__leveltwo {
+  //   background-color: #fff;
+  //   margin: 0 0.5rem 0.5rem 0.5rem;
+  //   padding: 0.5rem;
+  //   display: flex;
+  //   align-items: center;
+  //   justify-content: space-between;
+  //   font-size: 12px;
+  //   border-radius: 5px;
+  //   @include desktop {
+  //     display: none;
+  //   }
+  //   p {
+  //     color: #00358c;
+  //   }
+  //   h4 {
+  //     color: #5c6e8c;
+  //   }
+  //   &--changeview {
+  //     display: flex;
+  //     align-items: center;
+  //     gap: 1rem;
+  //     @include phone {
+  //       span {
+  //         display: none;
+  //       }
+  //     }
+  //   }
+  // }
+  &__levelthree {
+    background-color: #fffaf3;
+    border-radius: 5px;
+    color: #ed6c02;
+    text-align: center;
+    margin: 0 0.5rem 0.5rem 0.5rem;
+    padding: 0.5rem;
+    @include desktop {
+      display: none;
+    }
+    @include phone {
+      h4 {
+        font-size: 15px;
+      }
+    }
+  }
+  &__levelfour {
+    background-color: #ecf5ff;
+    border-radius: 5px;
+    color: #00358c;
+    text-align: center;
+    margin: 0.5rem;
+    padding: 0.5rem;
+    @include desktop {
+      display: none;
+    }
+  }
+  &__mainsection {
+    overflow: auto;
+    @include tablet {
+      padding: 0 0.5rem;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+    }
+    @include desktop {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    &--item {
+      background-color: #fff;
+      border-radius: 5px;
+      padding: 0.8rem;
+      @include phone {
+        margin: 0 0.5rem 0.5rem 0.5rem;
+      }
+
+      @include desktop {
+        padding: 1rem 0.5rem;
+        width: 400px;
+      }
+      h4 {
+        color: #0044b4;
+        font-size: 15px;
+        padding: 0 0.5rem;
+        @include bigtablet {
+          font-size: 18px;
+        }
+      }
+    }
+    &--tags {
+      padding: 0.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      color: #5c6e8c;
+
+      span {
+        font-size: 11px;
+        @include tablet {
+          font-size: 14px;
+        }
+      }
+    }
+
+    &--buttons {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      padding: 0 0.5rem;
+    }
+    &--fakeinput {
+      letter-spacing: 0.15px;
+      color: black;
+      font-weight: 500;
+      text-align: center;
+      width: 150px;
+      padding: 0.4rem;
+      border-radius: 6px;
+      border: 1px solid rgba(92, 110, 140, 0.2);
+      font-size: 12px;
+      span {
+        letter-spacing: 1px;
+        color: #5c6e8c;
+        font-weight: 300;
+      }
+    }
+  }
+  &__mobile {
+    @include phone {
+      display: block;
+    }
+    @include tablet {
+      display: none;
+    }
+    @include desktop {
+      display: none;
+    }
+  }
+  &__tablet {
+    @include phone {
+      display: none;
+    }
+    @include tablet {
+      display: block;
+    }
+    @include desktop {
+      display: none;
+    }
+  }
+  &__desktop {
+    @include phone {
+      display: none;
+    }
+    @include tablet {
+      display: none;
+    }
+    @include desktop {
+      display: block;
+    }
+  }
+}
+.tabletfakeinputwidth {
+  @include tablet {
+    width: 200px;
+  }
+  @include bigtablet {
+    width: 250px;
+  }
+}
