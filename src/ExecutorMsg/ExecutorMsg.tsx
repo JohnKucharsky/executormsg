@@ -1,5 +1,5 @@
 import { TabContext, TabList } from "@mui/lab";
-import { Button, Tab, TextField } from "@mui/material";
+import { Button, CircularProgress, Tab, TextField } from "@mui/material";
 import { SyntheticEvent, useState, useEffect } from "react";
 import Countdown, { CountdownRendererFn } from "react-countdown";
 import { format } from "date-fns";
@@ -10,7 +10,7 @@ import {
   svgClocks,
   svgDone,
 } from "./Svg";
-import { ExecutorMsgProps } from "./ExecutorMsg.def";
+import { ExecutorMsgProps, ExecutorMsgRes } from "./ExecutorMsg.def";
 
 function ExecutorMsg({
   queryParams,
@@ -25,6 +25,7 @@ function ExecutorMsg({
   const [executorWorks, setExecutorWorks] = useState<ExecutorMsgProps[]>([]);
   const [refresh, setRefresh] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     function fetchExecutorMsgData() {
@@ -40,7 +41,9 @@ function ExecutorMsg({
         },
       )
         .then((response) => response.json())
-        .then((data) => setExecutorWorks([...data.data]))
+        .then((data: ExecutorMsgRes) => {
+          setExecutorWorks([...data.data]);
+        })
         .catch((error) => {
           setError(error);
         });
@@ -51,6 +54,7 @@ function ExecutorMsg({
   function sendFact(e: SyntheticEvent, fact: number | null, workID: number) {
     e.preventDefault();
     async function postReq() {
+      setIsLoading(true);
       setError(null);
       const res = await fetch(
         `https://dev.api.rm.pragma.info/projects/${queryParams.id}/works/msg/executor/update-fact`,
@@ -67,7 +71,12 @@ function ExecutorMsg({
           }),
         },
       );
+
       const json = await res.json();
+      if (res.ok) {
+        setExecutorWorks([...executorWorks.filter((v) => v.workID !== workID)]);
+        setIsLoading(false);
+      }
       if (!res.ok) {
         setError(json.error);
       }
@@ -171,6 +180,7 @@ function ExecutorMsg({
         </div>
         <span className="mm__mobile ">
           <ItemJsx
+            isLoading={isLoading}
             execMsgData={executorWorks.filter(
               (v) => v.dailyChart.fact === null,
             )}
@@ -183,6 +193,7 @@ function ExecutorMsg({
         </div>
         <span className="mm__mobile">
           <ItemJsx
+            isLoading={isLoading}
             execMsgData={executorWorks.filter(
               (v) => v.dailyChart.fact !== null,
             )}
@@ -198,6 +209,7 @@ function ExecutorMsg({
         </div>
         <span className="mm__tablet">
           <ItemJsx
+            isLoading={isLoading}
             execMsgData={executorWorks.filter(
               (v) => v.dailyChart.fact === null,
             )}
@@ -210,6 +222,7 @@ function ExecutorMsg({
         </div>
         <span className="mm__tablet">
           <ItemJsx
+            isLoading={isLoading}
             execMsgData={executorWorks.filter(
               (v) => v.dailyChart.fact !== null,
             )}
@@ -223,6 +236,7 @@ function ExecutorMsg({
         {tabValue === "1" ? (
           <span className="mm__desktop">
             <ItemJsx
+              isLoading={isLoading}
               execMsgData={executorWorks.filter(
                 (v) => v.dailyChart.fact === null,
               )}
@@ -233,6 +247,7 @@ function ExecutorMsg({
         ) : (
           <span className="mm__desktop">
             <ItemJsx
+              isLoading={isLoading}
               execMsgData={executorWorks.filter(
                 (v) => v.dailyChart.fact !== null,
               )}
@@ -254,13 +269,18 @@ function ItemJsx({
   execMsgData,
   fact,
   sendFact,
+  isLoading,
 }: {
   changeView: boolean;
   execMsgData: ExecutorMsgProps[] | undefined;
   fact?: boolean;
   sendFact: (e: SyntheticEvent, fact: number | null, workID: number) => void;
+  isLoading: boolean;
 }) {
   if (!execMsgData) return <></>;
+  if (isLoading) {
+    return <CircularProgress />;
+  }
   return (
     <div
       style={changeView ? { gridTemplateColumns: "1fr" } : {}}
