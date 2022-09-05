@@ -23,13 +23,13 @@ function ExecutorMsg({
   const [tabValue, setTabValue] = useState("1");
   const [changeView, setChangeView] = useState(false);
   const [executorWorks, setExecutorWorks] = useState<ExecutorMsgProps[]>([]);
-
+  const [refresh, setRefresh] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function fetchExecutorMsgData() {
+    function fetchExecutorMsgData() {
       setError(null);
-      const response = await fetch(
+      fetch(
         `https://dev.api.rm.pragma.info/projects/${Number(
           queryParams.id,
         )}/works/msg/executor`,
@@ -38,22 +38,19 @@ function ExecutorMsg({
             Authorization: `Bearer ${queryParams.token}`,
           },
         },
-      );
-      const json = await response.json();
-
-      if (response.ok) {
-        setExecutorWorks(json.data);
-      }
-      if (!response.ok) {
-        setError(json.error);
-      }
+      )
+        .then((response) => response.json())
+        .then((data) => setExecutorWorks([...data.data]))
+        .catch((error) => {
+          setError(error);
+        });
     }
     fetchExecutorMsgData();
-  }, []);
+  }, [refresh]);
 
   function sendFact(e: SyntheticEvent, fact: number | null, workID: number) {
     e.preventDefault();
-    async function sendFact() {
+    async function postReq() {
       setError(null);
       const res = await fetch(
         `https://dev.api.rm.pragma.info/projects/${queryParams.id}/works/msg/executor/update-fact`,
@@ -75,7 +72,8 @@ function ExecutorMsg({
         setError(json.error);
       }
     }
-    sendFact();
+    postReq();
+    setRefresh(!refresh);
   }
 
   useEffect(() => {
